@@ -13,6 +13,9 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ZeroPipeline.Core\ZeroPipeline.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup Condition="Exists('..\..\..\ZeroGraphics\src\ZeroGraphics.Core\ZeroGraphics.Core.csproj')">
     <ProjectReference Include="..\..\..\ZeroGraphics\src\ZeroGraphics.Core\ZeroGraphics.Core.csproj" />
     <ProjectReference Include="..\..\..\ZeroGraphics\src\ZeroGraphics.Imaging\ZeroGraphics.Imaging.csproj" />
     <ProjectReference Include="..\..\..\ZeroGraphics\src\ZeroGraphics.Vision\ZeroGraphics.Vision.csproj" />
@@ -20,5 +23,15 @@
     <ProjectReference Include="..\..\..\ZeroInference\src\ZeroInference.Core\ZeroInference.Core.csproj" />
     <ProjectReference Include="..\..\..\ZeroStorage\src\ZeroStorage.Core\ZeroStorage.Core.csproj" />
     <ProjectReference Include="..\..\..\ZeroComm\src\ZeroComm.Core\ZeroComm.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup Condition="!Exists('..\..\..\ZeroGraphics\src\ZeroGraphics.Core\ZeroGraphics.Core.csproj')">
+    <PackageReference Include="ZeroGraphics.Core" Version="1.0.1" />
+    <PackageReference Include="ZeroGraphics.Imaging" Version="1.0.1" />
+    <PackageReference Include="ZeroGraphics.Vision" Version="1.0.1" />
+    <PackageReference Include="ZeroTensor.Core" Version="1.0.0" />
+    <PackageReference Include="ZeroInference.Core" Version="1.0.0" />
+    <PackageReference Include="ZeroStorage.Core" Version="1.0.0" />
+    <PackageReference Include="ZeroComm.Core" Version="1.0.0" />
   </ItemGroup>
 </Project>

@@ -15,7 +15,15 @@
     <ProjectReference Include="..\ZeroPipeline.Core\ZeroPipeline.Core.csproj" />
     <ProjectReference Include="..\ZeroPipeline.Nodes\ZeroPipeline.Nodes.csproj" />
     <ProjectReference Include="..\ZeroPipeline.Recipe\ZeroPipeline.Recipe.csproj" />
+  </ItemGroup>
+
+  <ItemGroup Condition="Exists('..\..\..\ZeroUI\src\ZeroUI.Core\ZeroUI.Core.csproj')">
     <ProjectReference Include="..\..\..\ZeroUI\src\ZeroUI.Core\ZeroUI.Core.csproj" />
     <ProjectReference Include="..\..\..\ZeroUI\src\ZeroUI.WinForms\ZeroUI.WinForms.csproj" />
+  </ItemGroup>
+
+  <ItemGroup Condition="!Exists('..\..\..\ZeroUI\src\ZeroUI.Core\ZeroUI.Core.csproj')">
+    <PackageReference Include="ZeroUI.Core" Version="1.4.0" />
+    <PackageReference Include="ZeroUI.WinForms" Version="1.4.0" />
   </ItemGroup>
 </Project>
