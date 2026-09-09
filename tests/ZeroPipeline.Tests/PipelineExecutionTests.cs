@@ -101,7 +101,19 @@ namespace ZeroPipeline.Tests
             var graph = new PipelineGraph();
             var source = new NumberSourceNode(1);
             var collected = new List<int>();
-            var sink = new ActionSinkNode<int>(collected.Add);
+            var receivedItemsTcs = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
+
+            var sink = new ActionSinkNode<int>(item =>
+            {
+                lock (collected)
+                {
+                    collected.Add(item);
+                    if (collected.Count >= 2)
+                    {
+                        receivedItemsTcs.TrySetResult(true);
+                    }
+                }
+            });
 
             graph.Connect(source.Output, sink.Input);
 
@@ -113,14 +125,19 @@ namespace ZeroPipeline.Tests
                 await executor.StartStreamingAsync(loopIntervalMs: 5, cancellationToken: cts.Token);
             });
 
-            // Let it run for a short duration
-            await Task.Delay(50);
+            // Wait until at least 2 items have been processed or timeout safely after 3s
+            await Task.WhenAny(receivedItemsTcs.Task, Task.Delay(3000));
             cts.Cancel();
 
             await Assert.ThrowsAnyAsync<OperationCanceledException>(() => streamingTask);
 
             // Verify multiple items were produced and consumed
-            Assert.True(collected.Count >= 2, $"Expected at least 2 items, got {collected.Count}");
+            int finalCount;
+            lock (collected)
+            {
+                finalCount = collected.Count;
+            }
+            Assert.True(finalCount >= 2, $"Expected at least 2 items, got {finalCount}");
         }
 
         [Fact]
