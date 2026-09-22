@@ -26,6 +26,12 @@ jobs:
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '8.0.x'
+          source-url: https://nuget.pkg.github.com/kzxl/index.json
+        env:
+          NUGET_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Run Unit Tests
+        run: dotnet test tests/ZeroPipeline.Tests/ZeroPipeline.Tests.csproj -c Release --verbosity normal
 
       - name: Pack ZeroPipeline.Core
         run: dotnet pack src/ZeroPipeline.Core/ZeroPipeline.Core.csproj -c Release -o nupkgs

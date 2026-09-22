@@ -18,7 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="ZeroUI.Core" Version="1.8.3" />
-    <PackageReference Include="ZeroUI.WinForms" Version="1.8.3" />
+    <PackageReference Include="ZeroUI.Core" Version="1.8.4" />
+    <PackageReference Include="ZeroUI.WinForms" Version="1.8.4" />
   </ItemGroup>
 </Project>

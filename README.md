@@ -5,7 +5,7 @@
 [![.NET Multi-Targeting](https://img.shields.io/badge/.NET-8.0%20%7C%204.6.2%20%7C%20Standard%202.0-purple.svg)](https://dotnet.microsoft.com/)
 [![Visual Studio UI](https://img.shields.io/badge/UI-Interactive%20Node%20Canvas-blueviolet.svg)]()
 [![Zero External Dependencies](https://img.shields.io/badge/Dependencies-0%20(Pure%20C%23)-brightgreen.svg)]()
-[![NuGet Version](https://img.shields.io/badge/NuGet-1.0.0-blue.svg)](https://www.nuget.org/packages/ZeroPipeline.Core)
+[![NuGet Version](https://img.shields.io/badge/NuGet-1.2.0-blue.svg)](https://www.nuget.org/packages/ZeroPipeline.Core)
 
 **ZeroPipeline** is an industrial-grade directed acyclic graph (DAG) workflow execution engine, machine vision inspection pipeline, and interactive visual node canvas for .NET with **zero external dependencies**. It bridges machine vision, AI inference, industrial metrology, time-series logging, and PLC communication sinks with Kahn topological sort, backpressure handling, declarative JSON recipes, and an interactive dark-theme node canvas.
 
@@ -124,6 +124,29 @@ Tested on Intel Core i7-13700K (.NET 8.0, Release x64):
 | **Backpressure Port Dispatch** | $12.5\text{M messages/sec}$ | **$0.0008 \text{ ms}$** | In-place ring queue |
 | **End-to-End AOI Inspection** | $600 \text{ frames/sec}$ | **$1.65 \text{ ms}$** | Zero buffer reallocations |
 | **Cubic Bezier Spline Hit Test** | $250\text{k hits/sec}$ | **$0.004 \text{ ms}$** | Stack-allocated SIMD |
+
+---
+
+## 🏛️ Ecosystem Architectural Alignment
+
+ZeroPipeline is a sovereign member of **Tier 5 (Presentation & Orchestration)** within the **ZeroPlatform** industrial automation ecosystem.
+
+```
+┌──────────────────────────────────────────────────────────┐
+│ Tier 5: Presentation & Orchestration (ZeroPipeline)      │
+└────────────────────────────┬─────────────────────────────┘
+                             │ orchestrates
+       ┌──────────────┬──────┴───────┬──────────────┐
+       ▼              ▼              ▼              ▼
+┌─────────────┐┌─────────────┐┌─────────────┐┌─────────────┐
+│   Tier 0    ││   Tier 1    ││   Tier 2    ││   Tier 4    │
+│(Primitives) ││(Storage,Comm││(Tensor,Infer││ (Graphics)  │
+└─────────────┘└─────────────┘└─────────────┘└─────────────┘
+```
+
+- **Cross-Tier Orchestration**: Seamlessly coordinates upstream components across Tier 0 (`ZeroPrimitives 1.3.0`), Tier 1 (`ZeroStorage 1.3.0`, `ZeroComm 1.2.0`), Tier 2 (`ZeroTensor 1.1.0`, `ZeroInference 1.3.0`), and Tier 4 (`ZeroGraphics 1.5.0`).
+- **Strict DAG Conformance**: Orchestrates lower tiers without creating cyclical dependencies.
+- **Packaging & CI/CD**: Standardized under `Company = ZeroPlatform`, `Authors = Phong Võ`, `<ZeroTier>5</ZeroTier>`.
 
 ---
 
