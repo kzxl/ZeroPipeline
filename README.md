@@ -5,7 +5,7 @@
 [![.NET Multi-Targeting](https://img.shields.io/badge/.NET-8.0%20%7C%204.6.2%20%7C%20Standard%202.0-purple.svg)](https://dotnet.microsoft.com/)
 [![Visual Studio UI](https://img.shields.io/badge/UI-Interactive%20Node%20Canvas-blueviolet.svg)]()
 [![Zero External Dependencies](https://img.shields.io/badge/Dependencies-0%20(Pure%20C%23)-brightgreen.svg)]()
-[![NuGet Version](https://img.shields.io/badge/NuGet-1.2.0-blue.svg)](https://www.nuget.org/packages/ZeroPipeline.Core)
+[![NuGet Version](https://img.shields.io/badge/NuGet-1.3.0-blue.svg)](https://www.nuget.org/packages/ZeroPipeline.Core)
 
 **ZeroPipeline** is an industrial-grade directed acyclic graph (DAG) workflow execution engine, machine vision inspection pipeline, and interactive visual node canvas for .NET with **zero external dependencies**. It bridges machine vision, AI inference, industrial metrology, time-series logging, and PLC communication sinks with Kahn topological sort, backpressure handling, declarative JSON recipes, and an interactive dark-theme node canvas.
 
@@ -29,7 +29,7 @@ graph TD
 | Package | Description | Target Frameworks |
 | :--- | :--- | :--- |
 | **`ZeroPipeline.Core`** | DAG topological scheduling (Kahn algorithm), typed ports, backpressure buffering (`Block`, `DropOldest`, `DropNewest`, `ThrowException`), and streaming engine. | `netstandard2.0;net462;net8.0` |
-| **`ZeroPipeline.Nodes`** | Domain inspection nodes: Synthetic Camera, Image Threshold, Metrology Edge Caliper, Barcode 1D/2D Reader, AI Tensor Inference, TSDB Storage Sink, Modbus/PLC Register Sink. | `netstandard2.0;net462;net8.0-windows` |
+| **`ZeroPipeline.Nodes`** | Domain inspection nodes: Synthetic Camera, Image Threshold, Color Space Conversion (sRGB/Adobe/P3/Rec2020), 2D Homography Rectification, Metrology Edge Caliper, Barcode 1D/2D Reader, AI Tensor Inference, TSDB Storage Sink, Modbus/PLC Register Sink. | `netstandard2.0;net462;net8.0-windows` |
 | **`ZeroPipeline.Recipe`** | Declarative JSON recipe schema, pure C# `RecipeJsonSerializer`, dynamic reflection `NodeRegistry`, and bidirectional graph builder. | `netstandard2.0;net462;net8.0` |
 | **`ZeroPipeline.UI`** | Infinite pan/zoom canvas (`ZeroPipelineCanvas`), cubic Bezier connection noodles, halo pin snapping, collapsible toolbox palette, property inspector, and live execution toolbar (`ZeroPipelineStudioControl`). | `net462;net8.0-windows` |
 
