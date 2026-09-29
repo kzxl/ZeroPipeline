@@ -13,6 +13,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ZeroPipeline.Core\ZeroPipeline.Core.csproj" />
+    <ProjectReference Include="..\..\..\ZeroOcr\src\ZeroOcr.Core\ZeroOcr.Core.csproj" />
   </ItemGroup>
 
   <ItemGroup>
