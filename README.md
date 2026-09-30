@@ -5,9 +5,9 @@
 [![.NET Multi-Targeting](https://img.shields.io/badge/.NET-8.0%20%7C%204.6.2%20%7C%20Standard%202.0-purple.svg)](https://dotnet.microsoft.com/)
 [![Visual Studio UI](https://img.shields.io/badge/UI-Interactive%20Node%20Canvas-blueviolet.svg)]()
 [![Zero External Dependencies](https://img.shields.io/badge/Dependencies-0%20(Pure%20C%23)-brightgreen.svg)]()
-[![NuGet Version](https://img.shields.io/badge/NuGet-1.3.0-blue.svg)](https://www.nuget.org/packages/ZeroPipeline.Core)
+[![NuGet Version](https://img.shields.io/badge/NuGet-1.4.0-blue.svg)](https://www.nuget.org/packages/ZeroPipeline.Core)
 
-**ZeroPipeline** is an industrial-grade directed acyclic graph (DAG) workflow execution engine, machine vision inspection pipeline, and interactive visual node canvas for .NET with **zero external dependencies**. It bridges machine vision, AI inference, industrial metrology, time-series logging, and PLC communication sinks with Kahn topological sort, backpressure handling, declarative JSON recipes, and an interactive dark-theme node canvas.
+**ZeroPipeline** is an industrial-grade directed acyclic graph (DAG) workflow execution engine, machine vision inspection pipeline, and interactive visual node canvas for .NET with **zero external dependencies**. It bridges machine vision, AI inference, optical character recognition (OCR), industrial metrology, time-series logging, and PLC communication sinks with Kahn topological sort, backpressure handling, declarative JSON recipes, and an interactive dark-theme node canvas.
 
 ---
 
@@ -17,7 +17,7 @@
 graph TD
     UI["ZeroPipeline.UI (Visual Canvas & Studio)"]
     Recipe["ZeroPipeline.Recipe (JSON Schema & Node Registry)"]
-    Nodes["ZeroPipeline.Nodes (Vision, Metrology, TSDB, PLC)"]
+    Nodes["ZeroPipeline.Nodes (Vision, Metrology, OCR, TSDB, PLC)"]
     Core["ZeroPipeline.Core (DAG, Kahn Sort, Backpressure Ports)"]
 
     UI --> Recipe
@@ -29,7 +29,7 @@ graph TD
 | Package | Description | Target Frameworks |
 | :--- | :--- | :--- |
 | **`ZeroPipeline.Core`** | DAG topological scheduling (Kahn algorithm), typed ports, backpressure buffering (`Block`, `DropOldest`, `DropNewest`, `ThrowException`), and streaming engine. | `netstandard2.0;net462;net8.0` |
-| **`ZeroPipeline.Nodes`** | Domain inspection nodes: Synthetic Camera, Image Threshold, Color Space Conversion (sRGB/Adobe/P3/Rec2020), 2D Homography Rectification, Metrology Edge Caliper, Barcode 1D/2D Reader, AI Tensor Inference, TSDB Storage Sink, Modbus/PLC Register Sink. | `netstandard2.0;net462;net8.0-windows` |
+| **`ZeroPipeline.Nodes`** | Domain inspection nodes: Synthetic Camera, Image Threshold, Color Space Conversion (sRGB/Adobe/P3/Rec2020), 2D Homography Rectification, Metrology Edge Caliper, Barcode 1D/2D Reader, Industrial OCR Inspection (`OcrInspectionNode` via `ZeroOcr.Core`), AI Tensor Inference, TSDB Storage Sink, Modbus/PLC Register Sink. | `netstandard2.0;net462;net8.0-windows` |
 | **`ZeroPipeline.Recipe`** | Declarative JSON recipe schema, pure C# `RecipeJsonSerializer`, dynamic reflection `NodeRegistry`, and bidirectional graph builder. | `netstandard2.0;net462;net8.0` |
 | **`ZeroPipeline.UI`** | Infinite pan/zoom canvas (`ZeroPipelineCanvas`), cubic Bezier connection noodles, halo pin snapping, collapsible toolbox palette, property inspector, and live execution toolbar (`ZeroPipelineStudioControl`). | `net462;net8.0-windows` |
 
@@ -112,6 +112,20 @@ studio.LoadRecipeJson(json);
 this.Controls.Add(studio);
 ```
 
+### 4. Industrial OCR Inspection (ZeroOcr Integration)
+```csharp
+using ZeroPipeline.Nodes.Inspection;
+
+// Create an automated OCR verification node evaluating substring, regex, or expiry date
+var ocrNode = new OcrInspectionNode(
+    inspectionName: "LotVerification",
+    expectedPattern: @"^BATCH-\d{4}$",
+    mode: OcrInspectionMode.Regex);
+
+graph.AddNode(ocrNode);
+graph.Connect(camera.Output, ocrNode.Input);
+```
+
 ---
 
 ## 📊 Benchmark & Performance
@@ -132,19 +146,19 @@ Tested on Intel Core i7-13700K (.NET 8.0, Release x64):
 ZeroPipeline is a sovereign member of **Tier 5 (Presentation & Orchestration)** within the **ZeroPlatform** industrial automation ecosystem.
 
 ```
-┌──────────────────────────────────────────────────────────┐
-│ Tier 5: Presentation & Orchestration (ZeroPipeline)      │
-└────────────────────────────┬─────────────────────────────┘
-                             │ orchestrates
-       ┌──────────────┬──────┴───────┬──────────────┐
-       ▼              ▼              ▼              ▼
-┌─────────────┐┌─────────────┐┌─────────────┐┌─────────────┐
-│   Tier 0    ││   Tier 1    ││   Tier 2    ││   Tier 4    │
-│(Primitives) ││(Storage,Comm││(Tensor,Infer││ (Graphics)  │
-└─────────────┘└─────────────┘└─────────────┘└─────────────┘
+┌────────────────────────────────────────────────────────────────────────┐
+│ Tier 5: Presentation & Orchestration (ZeroPipeline)                    │
+└───────────────────────────────────┬────────────────────────────────────┘
+                                    │ orchestrates
+       ┌──────────────┬─────────────┼──────────────┬─────────────┐
+       ▼              ▼             ▼              ▼             ▼
+┌─────────────┐┌─────────────┐┌─────────────┐┌─────────────┐┌─────────────┐
+│   Tier 0    ││   Tier 1    ││   Tier 2    ││   Tier 3    ││   Tier 4    │
+│(Primitives) ││(Storage,Comm││(Data,Network││(Ocr,Infer)  ││ (Graphics)  │
+└─────────────┘└─────────────┘└─────────────┘└─────────────┘└─────────────┘
 ```
 
-- **Cross-Tier Orchestration**: Seamlessly coordinates upstream components across Tier 0 (`ZeroPrimitives 1.3.0`), Tier 1 (`ZeroStorage 1.3.0`, `ZeroComm 1.2.0`), Tier 2 (`ZeroTensor 1.1.0`, `ZeroInference 1.3.0`), and Tier 4 (`ZeroGraphics 1.5.0`).
+- **Cross-Tier Orchestration**: Seamlessly coordinates upstream components across Tier 0 (`ZeroPrimitives 1.3.0`), Tier 1 (`ZeroStorage 1.3.0`, `ZeroComm 1.2.0`), Tier 2 (`ZeroTensor 1.1.0`), Tier 3 (`ZeroOcr 1.0.0`, `ZeroInference 1.3.0`), and Tier 4 (`ZeroGraphics 1.5.0`).
 - **Strict DAG Conformance**: Orchestrates lower tiers without creating cyclical dependencies.
 - **Packaging & CI/CD**: Standardized under `Company = ZeroPlatform`, `Authors = Phong Võ`, `<ZeroTier>5</ZeroTier>`.
 
