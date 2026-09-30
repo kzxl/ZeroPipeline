@@ -13,8 +13,20 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ZeroPipeline.Core\ZeroPipeline.Core.csproj" />
-    <ProjectReference Include="..\..\..\ZeroOcr\src\ZeroOcr.Core\ZeroOcr.Core.csproj" />
   </ItemGroup>
+
+  <Choose>
+    <When Condition="Exists('..\..\..\ZeroOcr\src\ZeroOcr.Core\ZeroOcr.Core.csproj')">
+      <ItemGroup>
+        <ProjectReference Include="..\..\..\ZeroOcr\src\ZeroOcr.Core\ZeroOcr.Core.csproj" />
+      </ItemGroup>
+    </When>
+    <Otherwise>
+      <ItemGroup>
+        <PackageReference Include="ZeroOcr.Core" Version="1.0.0" />
+      </ItemGroup>
+    </Otherwise>
+  </Choose>
 
   <ItemGroup>
     <PackageReference Include="ZeroPrimitives.Core" Version="1.6.0" />
